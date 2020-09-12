@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "751033077638",
+    "firebase_url": "https://etuuxlogin.firebaseio.com",
+    "project_id": "etuuxlogin",
+    "storage_bucket": "etuuxlogin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751033077638:android:c8c2a512dcf583b3492607",
+        "android_client_info": {
+          "package_name": "com.example.login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751033077638-sep6f2alnvb8599bjp38bpcsqg9irhuj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.login",
+            "certificate_hash": "817517d26824910d6b714c3067501e95259dba48"
+          }
+        },
+        {
+          "client_id": "751033077638-sf0f4k909tf9mjst46vc8sor53o8gbc8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF-Ba_sgKBwQLY-O6z473GbykNbRMfiRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751033077638-sf0f4k909tf9mjst46vc8sor53o8gbc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
