@@ -16,7 +16,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Page'),
+        title: Text('Ingresar'),
+        centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -27,35 +28,60 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: [
           Background(),
-          GetBuilder<LoginController>(
-              id: 'loading',
-              init: _loginController,
-              builder: (_) => (_.isLoading)
-                  ? Center(child: CircularProgressIndicator())
-                  : _loginForm(context))
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                _image(),
+            GetBuilder<LoginController>(
+                id: 'loading',
+                init: _loginController,
+                builder: (_) => (_.isLoading)
+                    ? Center(child: CircularProgressIndicator())
+                    : _loginForm(context))
+              ],
+            ),
+          )
         ],
+      ),
+    );
+  }
+
+  Widget _image() {
+    return Container(
+      margin: EdgeInsets.only(top: Get.height * 0.07),
+      child: Hero(
+        tag: 'logo',
+        child: Image(
+          image: AssetImage('assets/e-Tuux.png'),
+          width: Get.width,
+          height: Get.height * 0.3,
+        ),
       ),
     );
   }
 
   Widget _loginForm(BuildContext context) {
     return GetBuilder<LoginController>(
-      builder: ((_) => Form(
-            key: _formKey,
-            child: Padding(
-              padding: EdgeInsets.all(30.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _email(),
-                  SizedBox(height: 10.0),
-                  _password(),
-                  SizedBox(height: 10.0),
-                  _loginButton(context)
-                ],
+      builder: ((_) => Container(
+        // margin: EdgeInsets.only(top: Get.height * 0.2),
+        child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _email(),
+                    SizedBox(height: 10.0),
+                    _password(),
+                    SizedBox(height: 10.0),
+                    _loginButton(context)
+                  ],
+                ),
               ),
             ),
-          )),
+      )),
     );
   }
 
@@ -64,7 +90,7 @@ class LoginPage extends StatelessWidget {
         id: 'email',
         builder: ((_) => CustomFormField(
               controller: _.emailController,
-              labelText: 'Email',
+              labelText: 'Correo',
               icon: Icons.email,
               prefixIcon: Icon(Icons.alternate_email),
               validator: _.emailValidator,
@@ -77,7 +103,7 @@ class LoginPage extends StatelessWidget {
       id: 'pass',
       builder: ((_) => CustomFormField(
             controller: _.passwordController,
-            labelText: 'Password',
+            labelText: 'Contraseña',
             icon: Icons.lock,
             prefixIcon: Icon(Icons.lock_outline),
             validator: _.passwordValidator,
@@ -94,19 +120,22 @@ class LoginPage extends StatelessWidget {
   }
 
   _loginButton(BuildContext context) {
-    return Button(
-      text: 'Sign In',
-      onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          _loginController.isLoading = true;
-          FocusScope.of(context).unfocus();
-          final resp = await _loginController.login();
-          if (resp) {
-            Get.offNamed('pruebaPage');
+    return Container(
+      margin: EdgeInsets.only(top: 20.0),
+      child: Button(
+        text: 'Iniciar sesión',
+        onPressed: () async {
+          if (_formKey.currentState.validate()) {
+            _loginController.isLoading = true;
+            FocusScope.of(context).unfocus();
+            final resp = await _loginController.login();
+            if (resp) {
+              Get.offNamed('businessPage');
+            }
+            _loginController.isLoading = false;
           }
-          _loginController.isLoading = false;
-        }
-      },
+        },
+      ),
     );
   }
 }

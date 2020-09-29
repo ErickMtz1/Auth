@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,10 +9,13 @@ import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 import 'package:login/controllers/auth_controller.dart';
+import 'package:login/models/user_data_model.dart';
+import 'package:package_info/package_info.dart';
 
 class RegisterController extends GetxController {
   AuthController _authController = Get.find<AuthController>();
   FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -24,7 +28,7 @@ class RegisterController extends GetxController {
     RequiredValidator(errorText: 'Name is required'),
     MinLengthValidator(2, errorText: 'Password must be at least 2 digits long'),
   ]);
-  
+
   final passwordValidator = MultiValidator([
     RequiredValidator(errorText: 'Password is required'),
     MinLengthValidator(6, errorText: 'Password must be at least 6 digits long'),
@@ -61,32 +65,32 @@ class RegisterController extends GetxController {
     nameController?.dispose();
     emailController?.dispose();
     passwordController?.dispose();
-    obscureText = true;
+    _obscureText = true;
     _isLoading = false;
     super.onClose();
   }
 
   onChangeName() {
-    nameController.text;
+    // nameController.text;
     update(['name']);
   }
 
   onChangeEmail() {
-    emailController.text;
+    // emailController.text;
     update(['email']);
   }
 
   onChangePassword() {
-    passwordController.text;
+    // passwordController.text;
     update(['pass']);
   }
 
-  set obscureText(value) {
+  set obscureText(bool value) {
     this._obscureText = value;
     update(['pass']);
   }
 
-  get obscureText => this._obscureText;
+  bool get obscureText => this._obscureText;
 
   set isLoading(bool value) {
     this._isLoading = value;
@@ -97,9 +101,21 @@ class RegisterController extends GetxController {
 
   createUser() async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
+      await _auth
+          .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim())
+          .then((result) async {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        UserModel userModel = UserModel(
+          name: nameController.text,
+          uuid: result.user.uid,
+          registerDate: result.user.metadata.creationTime,
+          app: packageInfo.appName,
+        );
+
+        _updateUserFirestore(userModel, result.user);
+      });
       return true;
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Error creating user', e.code,
@@ -111,5 +127,11 @@ class RegisterController extends GetxController {
           duration: Duration(seconds: 4));
       return false;
     }
+  }
+
+  void _updateUserFirestore(UserModel user, User _firebaseUser) {
+    final userUpdate = _db.collection('users');
+    userUpdate.doc('/${_firebaseUser.uid}').set(user.toJson());
+    update();
   }
 }

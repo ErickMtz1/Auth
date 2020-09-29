@@ -16,17 +16,25 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Register Page'),
+          title: Text('Registro'),
+          centerTitle: true,
         ),
         body: Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             Background(),
-            GetBuilder<RegisterController>(
-              id: 'loading',
-              init: _registerController,
-              builder: (_) => (_registerController.isLoading)
-                  ? Center(child: CircularProgressIndicator())
-                  : _loginForm(context),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  GetBuilder<RegisterController>(
+                    id: 'loading',
+                    init: _registerController,
+                    builder: (_) => (_registerController.isLoading)
+                        ? Center(child: CircularProgressIndicator())
+                        : _loginForm(context),
+                  )
+                ],
+              ),
             )
           ],
         ));
@@ -76,7 +84,7 @@ class RegisterPage extends StatelessWidget {
               labelText: 'Email',
               icon: Icons.email,
               prefixIcon: Icon(Icons.alternate_email),
-              validator: _.emailValidator ,
+              validator: _.emailValidator,
               counterText: _.emailController.text,
             )));
   }
@@ -86,6 +94,7 @@ class RegisterPage extends StatelessWidget {
         id: 'pass',
         builder: ((_) => CustomFormField(
               controller: _.passwordController,
+              obscureText: _.obscureText,
               labelText: 'Password',
               icon: Icons.lock,
               prefixIcon: Icon(Icons.lock_outline),
@@ -101,19 +110,22 @@ class RegisterPage extends StatelessWidget {
   }
 
   _registerButton(BuildContext context) {
-    return Button(
-      text: 'Sign In',
-      onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          _registerController.isLoading = true;
-          FocusScope.of(context).unfocus();
-          final resp = await _registerController.createUser();
-          if (resp) {
-            Get.offNamed('pruebaPage');
+    return Container(
+      margin: EdgeInsets.only(top: 25.0),
+      child: Button(
+        text: 'Registrarse',
+        onPressed: () async {
+          if (_formKey.currentState.validate()) {
+            _registerController.isLoading = true;
+            FocusScope.of(context).unfocus();
+            final resp = await _registerController.createUser();
+            if (resp) {
+              Get.offNamed('businessPage');
+            }
+            _registerController.isLoading = false;
           }
-          _registerController.isLoading = false;
-        }
-      },
+        },
+      ),
     );
   }
 }

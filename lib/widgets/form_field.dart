@@ -16,7 +16,7 @@ class CustomFormField extends StatelessWidget {
   const CustomFormField(
       {@required this.controller,
       @required this.labelText,
-      @required this.counterText,
+      this.counterText,
       @required this.icon,
       this.autovalidate = false,
       this.prefixIcon,
