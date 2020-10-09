@@ -130,7 +130,9 @@ class LoginPage extends StatelessWidget {
             FocusScope.of(context).unfocus();
             final resp = await _loginController.login();
             if (resp) {
-              Get.offNamed('businessPage');
+              // Redirect to new page
+              // add this page in routes.dart on folder routes
+              Get.offNamed('');
             }
             _loginController.isLoading = false;
           }

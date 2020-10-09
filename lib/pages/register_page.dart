@@ -120,7 +120,8 @@ class RegisterPage extends StatelessWidget {
             FocusScope.of(context).unfocus();
             final resp = await _registerController.createUser();
             if (resp) {
-              Get.offNamed('businessPage');
+              // Redirect to new page
+              // add this page in routes.dart on folder routes
             }
             _registerController.isLoading = false;
           }
