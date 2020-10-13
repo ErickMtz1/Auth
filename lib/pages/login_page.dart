@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:login/controllers/login_register_controller.dart';
+
 
 import 'package:login/widgets/background.dart';
 import 'package:login/widgets/button.dart';
@@ -94,7 +94,7 @@ class LoginPage extends StatelessWidget {
               icon: Icons.email,
               prefixIcon: Icon(Icons.alternate_email),
               validator: _.emailValidator,
-              // counterText: _.emailController.text,
+              counterText: _.emailController.text,
             )));
   }
 
@@ -107,7 +107,7 @@ class LoginPage extends StatelessWidget {
             icon: Icons.lock,
             prefixIcon: Icon(Icons.lock_outline),
             validator: _.passwordValidator,
-            // counterText: _.passwordController.text,
+            counterText: _.passwordController.text,
             obscureText: _.obscureText,
             suffixIcon: IconButton(
               icon: (_.obscureText)
@@ -132,6 +132,7 @@ class LoginPage extends StatelessWidget {
             if (resp) {
               // Redirect to new page
               // add this page in routes.dart on folder routes
+              Get.offNamed('');
             }
             _loginRegisterController.isLoading = false;
           }
