@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:login/controllers/login_controller.dart';
+import 'package:login/controllers/login_register_controller.dart';
 
 import 'package:login/widgets/background.dart';
 import 'package:login/widgets/button.dart';
@@ -9,8 +9,8 @@ import 'package:login/widgets/form_field.dart';
 
 class LoginPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final LoginController _loginController =
-      Get.put<LoginController>(LoginController());
+  final LoginRegisterController _loginRegisterController =
+      Get.put<LoginRegisterController>(LoginRegisterController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // await Get.delete<LoginController>();
+              // await Get.delete<LoginRegisterController>();
               Get.back();
             }),
       ),
@@ -33,9 +33,9 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: [
                 _image(),
-            GetBuilder<LoginController>(
+            GetBuilder<LoginRegisterController>(
                 id: 'loading',
-                init: _loginController,
+                init: _loginRegisterController,
                 builder: (_) => (_.isLoading)
                     ? Center(child: CircularProgressIndicator())
                     : _loginForm(context))
@@ -62,7 +62,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _loginForm(BuildContext context) {
-    return GetBuilder<LoginController>(
+    return GetBuilder<LoginRegisterController>(
       builder: ((_) => Container(
         // margin: EdgeInsets.only(top: Get.height * 0.2),
         child: Form(
@@ -86,7 +86,7 @@ class LoginPage extends StatelessWidget {
   }
 
   _email() {
-    return GetBuilder<LoginController>(
+    return GetBuilder<LoginRegisterController>(
         id: 'email',
         builder: ((_) => CustomFormField(
               controller: _.emailController,
@@ -94,12 +94,12 @@ class LoginPage extends StatelessWidget {
               icon: Icons.email,
               prefixIcon: Icon(Icons.alternate_email),
               validator: _.emailValidator,
-              counterText: _.emailController.text,
+              // counterText: _.emailController.text,
             )));
   }
 
   _password() {
-    return GetBuilder<LoginController>(
+    return GetBuilder<LoginRegisterController>(
       id: 'pass',
       builder: ((_) => CustomFormField(
             controller: _.passwordController,
@@ -107,7 +107,7 @@ class LoginPage extends StatelessWidget {
             icon: Icons.lock,
             prefixIcon: Icon(Icons.lock_outline),
             validator: _.passwordValidator,
-            counterText: _.passwordController.text,
+            // counterText: _.passwordController.text,
             obscureText: _.obscureText,
             suffixIcon: IconButton(
               icon: (_.obscureText)
@@ -126,15 +126,14 @@ class LoginPage extends StatelessWidget {
         text: 'Iniciar sesión',
         onPressed: () async {
           if (_formKey.currentState.validate()) {
-            _loginController.isLoading = true;
+            _loginRegisterController.isLoading = true;
             FocusScope.of(context).unfocus();
-            final resp = await _loginController.login();
+            final resp = await _loginRegisterController.login();
             if (resp) {
               // Redirect to new page
               // add this page in routes.dart on folder routes
-              Get.offNamed('');
             }
-            _loginController.isLoading = false;
+            _loginRegisterController.isLoading = false;
           }
         },
       ),

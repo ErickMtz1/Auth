@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:login/controllers/register_controller.dart';
+import 'package:login/controllers/login_register_controller.dart';
 
 import 'package:login/widgets/background.dart';
 import 'package:login/widgets/button.dart';
@@ -9,8 +8,8 @@ import 'package:login/widgets/form_field.dart';
 
 class RegisterPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final RegisterController _registerController =
-      Get.put<RegisterController>(RegisterController());
+  final LoginRegisterController _loginRegisterController =
+      Get.put<LoginRegisterController>(LoginRegisterController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +25,10 @@ class RegisterPage extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  GetBuilder<RegisterController>(
+                  GetBuilder<LoginRegisterController>(
                     id: 'loading',
-                    init: _registerController,
-                    builder: (_) => (_registerController.isLoading)
+                    init: _loginRegisterController,
+                    builder: (_) => (_loginRegisterController.isLoading)
                         ? Center(child: CircularProgressIndicator())
                         : _loginForm(context),
                   )
@@ -41,7 +40,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   Widget _loginForm(BuildContext context) {
-    return GetBuilder<RegisterController>(
+    return GetBuilder<LoginRegisterController>(
       builder: ((_) => Form(
             key: _formKey,
             child: Padding(
@@ -64,7 +63,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   _name() {
-    return GetBuilder<RegisterController>(
+    return GetBuilder<LoginRegisterController>(
         id: 'name',
         builder: ((_) => CustomFormField(
               controller: _.nameController,
@@ -77,7 +76,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   _email() {
-    return GetBuilder<RegisterController>(
+    return GetBuilder<LoginRegisterController>(
         id: 'email',
         builder: ((_) => CustomFormField(
               controller: _.emailController,
@@ -90,7 +89,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   _password() {
-    return GetBuilder<RegisterController>(
+    return GetBuilder<LoginRegisterController>(
         id: 'pass',
         builder: ((_) => CustomFormField(
               controller: _.passwordController,
@@ -98,7 +97,7 @@ class RegisterPage extends StatelessWidget {
               labelText: 'Password',
               icon: Icons.lock,
               prefixIcon: Icon(Icons.lock_outline),
-              validator: _.passwordValidator,
+              validator: _.passwordRegisterValidator,
               counterText: _.passwordController.text,
               suffixIcon: IconButton(
                 icon: (_.obscureText)
@@ -116,14 +115,14 @@ class RegisterPage extends StatelessWidget {
         text: 'Registrarse',
         onPressed: () async {
           if (_formKey.currentState.validate()) {
-            _registerController.isLoading = true;
+            _loginRegisterController.isLoading = true;
             FocusScope.of(context).unfocus();
-            final resp = await _registerController.createUser();
+            final resp = await _loginRegisterController.createUser();
             if (resp) {
               // Redirect to new page
               // add this page in routes.dart on folder routes
             }
-            _registerController.isLoading = false;
+            _loginRegisterController.isLoading = false;
           }
         },
       ),
